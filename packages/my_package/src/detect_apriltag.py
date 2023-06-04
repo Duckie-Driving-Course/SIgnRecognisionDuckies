@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 import copy
 import time
 import argparse
@@ -29,7 +27,6 @@ def get_args():
 
 
 def main():
-    # 引数解析 #################################################################
     args = get_args()
 
     cap_device = args.device
@@ -44,12 +41,10 @@ def main():
     decode_sharpening = args.decode_sharpening
     debug = args.debug
 
-    # カメラ準備 ###############################################################
     cap = cv.VideoCapture(cap_device)
     cap.set(cv.CAP_PROP_FRAME_WIDTH, cap_width)
     cap.set(cv.CAP_PROP_FRAME_HEIGHT, cap_height)
 
-    # Detector準備 #############################################################
     at_detector = Detector(
         families=families,
         nthreads=nthreads,
@@ -65,13 +60,11 @@ def main():
     while True:
         start_time = time.time()
 
-        # カメラキャプチャ #####################################################
         ret, image = cap.read()
         if not ret:
             break
         debug_image = copy.deepcopy(image)
 
-        # 検出実施 #############################################################
         image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
         tags = at_detector.detect(
             image,
@@ -80,17 +73,14 @@ def main():
             tag_size=None,
         )
 
-        # 描画 ################################################################
         debug_image = draw_tags(debug_image, tags, elapsed_time)
 
         elapsed_time = time.time() - start_time
 
-        # キー処理(ESC：終了) #################################################
         key = cv.waitKey(1)
-        if key == 27:  # ESC
+        if key == 27:  
             break
 
-        # 画面反映 #############################################################
         cv.imshow('AprilTag Detect Demo', debug_image)
 
     cap.release()
@@ -114,10 +104,8 @@ def draw_tags(
         corner_03 = (int(corners[2][0]), int(corners[2][1]))
         corner_04 = (int(corners[3][0]), int(corners[3][1]))
 
-        # 中心
         cv.circle(image, (center[0], center[1]), 5, (0, 0, 255), 2)
 
-        # 各辺
         cv.line(image, (corner_01[0], corner_01[1]),
                 (corner_02[0], corner_02[1]), (255, 0, 0), 2)
         cv.line(image, (corner_02[0], corner_02[1]),
@@ -127,15 +115,11 @@ def draw_tags(
         cv.line(image, (corner_04[0], corner_04[1]),
                 (corner_01[0], corner_01[1]), (0, 255, 0), 2)
 
-        # タグファミリー、タグID
-        # cv.putText(image,
-        #            str(tag_family) + ':' + str(tag_id),
-        #            (corner_01[0], corner_01[1] - 10), cv.FONT_HERSHEY_SIMPLEX,
-        #            0.6, (0, 255, 0), 1, cv.LINE_AA)
         cv.putText(image, str(tag_id), (center[0] - 10, center[1] - 10),
                    cv.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2, cv.LINE_AA)
+        
+        print(tag_id)
 
-    # 処理時間
     cv.putText(image,
                "Elapsed Time:" + '{:.1f}'.format(elapsed_time * 1000) + "ms",
                (10, 30), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2,
