@@ -1,7 +1,6 @@
-from packages.my_package.src.duckiebot_connection import DuckiebotNode
+from ...base_package.src.duckiebot_connection import DuckiebotNode
+from .apriltag_detector import AprilTagger
 import rospy
-from sensor_msgs.msg import CompressedImage
-from .detect_apriltag import AprilTagger
 
 
 class AprilTaggerNode(DuckiebotNode):
