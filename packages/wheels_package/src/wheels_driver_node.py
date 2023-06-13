@@ -4,11 +4,15 @@ import os
 import rospy
 from duckietown_msgs.msg import WheelsCmdStamped
 from duckietown.dtros import DTROS, NodeType
+from movement_commands import MovementCommands
 
 CAR = os.environ['VEHICLE_NAME']
 wheels_cmd = f'/{CAR}/wheels_driver_node/wheels_cmd'
 wheels_cmd_executed = f'/{CAR}/wheels_driver_node/wheels_cmd_executed'
 
+COMMAND_DICTIONARY = {
+    "20": MovementCommands.stop_command
+}
 
 class WheelsDriver(DTROS):
     def __init__(self, node_name):
@@ -54,24 +58,25 @@ class WheelsDriver(DTROS):
         # twist.v = 40
         # twist.omega = 10
         # This is for turning
-
+        detected_id = 1533
         while not rospy.is_shutdown():
             self.wheels_cmd_pub.publish(wheel)
             self.wheels_cmd_executed_pub.publish(wheel)
             f = open("/code/catkin_ws/src/SIgnRecognisionDuckies/packages/assets/sign_ids.txt", "r")
-            print(f.read())
+            tag_id = f.read()
+            if detected_id != tag_id and tag_id != '':
+                wheel.vel_left, wheel.vel_right = COMMAND_DICTIONARY[tag_id.strip()](wheel.vel_left, wheel.vel_right)
+                detected_id = tag_id
             f.close()
-            f = open("/code/catkin_ws/src/SIgnRecognisionDuckies/packages/assets/sign_ids.txt", "w")
-            f.write("")
-            f.close()
-            # self.cmd_pub.publish(twist)
     
     def on_shutdown(self):
+
         rospy.loginfo('Shutting down...')
         wheel = WheelsCmdStamped()
         wheel.vel_right = 0
         wheel.vel_left = 0
         self.wheels_cmd_pub.publish(wheel)
+
 
 if __name__ == "__main__":
     runner = WheelsDriver("wheels_driver_node")

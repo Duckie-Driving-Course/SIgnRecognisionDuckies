@@ -2,13 +2,12 @@ import copy
 import argparse
 import os
 import rospy
-
 import cv2 as cv
 from dt_apriltags import Detector
 
 
 class AprilTagger:
-    def __init__(self):
+    def __init__(self, detection_range):
         args = self.get_args()
 
         families = args.families
@@ -28,6 +27,7 @@ class AprilTagger:
             decode_sharpening=decode_sharpening,
             debug=debug,
         )
+        self.detection_range = detection_range
 
     @staticmethod
     def get_args():
@@ -64,9 +64,7 @@ class AprilTagger:
 
         return debug_image
 
-
-    @staticmethod
-    def draw_tags(image, tags):
+    def draw_tags(self, image, tags):
         for tag in tags:
             tag_id = tag.tag_id
             center = tag.center
@@ -91,24 +89,10 @@ class AprilTagger:
 
             cv.putText(image, str(tag_id), (center[0] - 10, center[1] - 10),
                        cv.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2, cv.LINE_AA)
-
-            f = open("/code/catkin_ws/src/SIgnRecognisionDuckies/packages/assets/sign_ids.txt", "a")
-            f.write(str(tag_id))
-            f.write("\n")
-            f.close()
+            if abs(int(corners[0][0]) - int(corners[0][1])) > self.detection_range:
+                f = open("/code/catkin_ws/src/SIgnRecognisionDuckies/packages/assets/sign_ids.txt", "w")
+                f.write(str(tag_id))
+                f.write("\n")
+                f.close()
 
         return image
-# test for detect_apriltag
-# cum = cv.VideoCapture(0)
-# april = AprilTagger()
-# while True:
-#     ret, image = cum.read()
-#de
-#     if not ret:
-#         break
-#     april.process_image(image)
-#
-#     key = cv.waitKey(1)
-#     if key == 27:
-#         break
-# cv.destroyAllWindows()
