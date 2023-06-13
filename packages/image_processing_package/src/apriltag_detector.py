@@ -1,7 +1,7 @@
 import copy
 import argparse
 import cv2 as cv
-from pupil_apriltags import Detector
+from dt_apriltags import Detector
 
 
 class AprilTagger:
