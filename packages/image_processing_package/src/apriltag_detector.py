@@ -1,5 +1,8 @@
 import copy
 import argparse
+import os
+import rospy
+
 import cv2 as cv
 from dt_apriltags import Detector
 
@@ -89,7 +92,10 @@ class AprilTagger:
             cv.putText(image, str(tag_id), (center[0] - 10, center[1] - 10),
                        cv.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2, cv.LINE_AA)
 
-            print(tag_id)
+            f = open("/code/catkin_ws/src/SIgnRecognisionDuckies/packages/assets/sign_ids.txt", "a")
+            f.write(str(tag_id))
+            f.write("\n")
+            f.close()
 
         return image
 # test for detect_apriltag

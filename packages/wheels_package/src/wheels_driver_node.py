@@ -58,6 +58,12 @@ class WheelsDriver(DTROS):
         while not rospy.is_shutdown():
             self.wheels_cmd_pub.publish(wheel)
             self.wheels_cmd_executed_pub.publish(wheel)
+            f = open("/code/catkin_ws/src/SIgnRecognisionDuckies/packages/assets/sign_ids.txt", "r")
+            print(f.read())
+            f.close()
+            f = open("/code/catkin_ws/src/SIgnRecognisionDuckies/packages/assets/sign_ids.txt", "w")
+            f.write("")
+            f.close()
             # self.cmd_pub.publish(twist)
     
     def on_shutdown(self):
