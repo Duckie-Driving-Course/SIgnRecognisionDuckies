@@ -75,7 +75,6 @@ class AprilTagger:
             corner_02 = (int(corners[1][0]), int(corners[1][1]))
             corner_03 = (int(corners[2][0]), int(corners[2][1]))
             corner_04 = (int(corners[3][0]), int(corners[3][1]))
-
             cv.circle(image, (center[0], center[1]), 5, (0, 0, 255), 2)
 
             cv.line(image, (corner_01[0], corner_01[1]),
@@ -89,10 +88,25 @@ class AprilTagger:
 
             cv.putText(image, str(tag_id), (center[0] - 10, center[1] - 10),
                        cv.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2, cv.LINE_AA)
-            if abs(int(corners[0][0]) - int(corners[0][1])) > self.detection_range:
+            print(f"FARTOBI BLIAT {abs(int(corners[0][0]) - int(corners[1][0])) * abs(int(corners[1][1]) - int(corners[2][1]))}")
+            if abs(int(corners[0][0]) - int(corners[1][0])) * abs(int(corners[1][1]) - int(corners[2][1])) > self.detection_range:
                 f = open("/code/catkin_ws/src/SIgnRecognisionDuckies/packages/assets/sign_ids.txt", "w")
                 f.write(str(tag_id))
                 f.write("\n")
                 f.close()
 
         return image
+# test for detect_apriltag
+# cum = cv.VideoCapture(0)
+# april = AprilTagger()
+# while True:
+#     ret, image = cum.read()
+#de
+#     if not ret:
+#         break
+#     april.process_image(image)
+#
+#     key = cv.waitKey(1)
+#     if key == 27:
+#         break
+# cv.destroyAllWindows()
