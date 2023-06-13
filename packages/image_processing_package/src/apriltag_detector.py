@@ -1,7 +1,5 @@
 import copy
-import time
 import argparse
-
 import cv2 as cv
 from pupil_apriltags import Detector
 
@@ -94,3 +92,17 @@ class AprilTagger:
             print(tag_id)
 
         return image
+# test for detect_apriltag
+cum = cv.VideoCapture(0)
+april = AprilTagger()
+while True:
+    ret, image = cum.read()
+
+    if not ret:
+        break
+    april.process_image(image)
+
+    key = cv.waitKey(1)
+    if key == 27:
+        break
+cv.destroyAllWindows()
