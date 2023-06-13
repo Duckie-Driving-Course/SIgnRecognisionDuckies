@@ -14,6 +14,7 @@ dt-launchfile-init
 
 # launching app
 dt-exec rosrun image_processing_package apriltagger_node.py
+dt-exec rosrun wheels_package wheels_driver_node.py
 
 # ----------------------------------------------------------------------------
 # YOUR CODE ABOVE THIS LINE
