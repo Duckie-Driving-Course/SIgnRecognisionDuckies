@@ -1,9 +1,11 @@
 import rospy
+import os
 from cv_bridge import CvBridge
 from duckietown.dtros import DTROS, NodeType
 from sensor_msgs.msg import CompressedImage
 
-TOPIC_NAME = '/bot_name/camera_node/image/compressed'
+HOST = os.environ['VEHICLE_NAME']
+TOPIC_NAME = f'/{HOST}/camera_node/image/compressed'
 
 
 class DuckiebotNode(DTROS):

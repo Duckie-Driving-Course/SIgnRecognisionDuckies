@@ -1,13 +1,21 @@
-from packages.my_package.src.duckiebot_connection import DuckiebotNode
+#!/usr/bin/env python3
+from apriltag_detector import AprilTagger
 import rospy
+import os
+from cv_bridge import CvBridge
+from duckietown.dtros import DTROS, NodeType
 from sensor_msgs.msg import CompressedImage
-from .detect_apriltag import AprilTagger
 
+HOST = os.environ['VEHICLE_NAME']
+TOPIC_NAME = f'/{HOST}/camera_node/image/compressed'
 
-class AprilTaggerNode(DuckiebotNode):
+class AprilTaggerNode(DTROS):
     def __init__(self, node_name, result_topic_name):
-        super(AprilTaggerNode, self).__init__(node_name, result_topic_name)
-        self.aprilTagger = AprilTagger()
+        super(AprilTaggerNode, self).__init__(node_name=node_name, node_type=NodeType.PERCEPTION)
+        self.aprilTagger = AprilTagger(4000)
+        self.bridge = CvBridge()
+        self.sub = rospy.Subscriber(TOPIC_NAME, CompressedImage, self.callback, queue_size=1)
+        self.pub = rospy.Publisher(result_topic_name, CompressedImage, queue_size=1)
 
     def callback(self, msg):
         print(f'received message with type ${type(msg)}')

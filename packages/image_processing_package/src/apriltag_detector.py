@@ -1,13 +1,11 @@
 import copy
-import time
 import argparse
-
 import cv2 as cv
-from pupil_apriltags import Detector
+from dt_apriltags import Detector
 
 
 class AprilTagger:
-    def __init__(self):
+    def __init__(self, detection_range):
         args = self.get_args()
 
         families = args.families
@@ -27,6 +25,7 @@ class AprilTagger:
             decode_sharpening=decode_sharpening,
             debug=debug,
         )
+        self.detection_range = detection_range
 
     @staticmethod
     def get_args():
@@ -63,9 +62,7 @@ class AprilTagger:
 
         return debug_image
 
-
-    @staticmethod
-    def draw_tags(image, tags):
+    def draw_tags(self, image, tags):
         for tag in tags:
             tag_id = tag.tag_id
             center = tag.center
@@ -76,7 +73,6 @@ class AprilTagger:
             corner_02 = (int(corners[1][0]), int(corners[1][1]))
             corner_03 = (int(corners[2][0]), int(corners[2][1]))
             corner_04 = (int(corners[3][0]), int(corners[3][1]))
-
             cv.circle(image, (center[0], center[1]), 5, (0, 0, 255), 2)
 
             cv.line(image, (corner_01[0], corner_01[1]),
@@ -91,6 +87,24 @@ class AprilTagger:
             cv.putText(image, str(tag_id), (center[0] - 10, center[1] - 10),
                        cv.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2, cv.LINE_AA)
 
-            print(tag_id)
+            if abs(int(corners[0][0]) - int(corners[1][0])) * abs(int(corners[1][1]) - int(corners[2][1])) > self.detection_range:
+                f = open("/code/catkin_ws/src/SIgnRecognisionDuckies/assets/sign_ids.txt", "w")
+                f.write(str(tag_id))
+                f.write("\n")
+                f.close()
 
         return image
+# test for detect_apriltag
+# cum = cv.VideoCapture(0)
+# april = AprilTagger()
+# while True:
+#     ret, image = cum.read()
+#de
+#     if not ret:
+#         break
+#     april.process_image(image)
+#
+#     key = cv.waitKey(1)
+#     if key == 27:
+#         break
+# cv.destroyAllWindows()
