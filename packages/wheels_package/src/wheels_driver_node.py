@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 import os
 import rospy
 from duckietown_msgs.msg import WheelsCmdStamped

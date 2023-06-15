@@ -1,7 +1,7 @@
 # parameters
 ARG REPO_NAME="SIgnRecognisionDuckies"
 ARG DESCRIPTION="Recognize Signs using duckies"
-ARG MAINTAINER="Giorgi Tsartsidze (<giokepa4@gmail.com)"
+ARG MAINTAINER="Giorgi Tsartsidze (giokepa4@gmail.com)"
 # pick an icon from: https://fontawesome.com/v4.7.0/icons/
 ARG ICON="cube"
 
