@@ -51,7 +51,6 @@ class AprilTagger:
 
     def process_image(self, image):
         debug_image = copy.deepcopy(image)
-
         image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
         tags = self.at_detector.detect(
             image,
@@ -88,12 +87,11 @@ class AprilTagger:
 
             cv.putText(image, str(tag_id), (center[0] - 10, center[1] - 10),
                        cv.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2, cv.LINE_AA)
-            print(f"FARTOBI BLIAT {abs(int(corners[0][0]) - int(corners[1][0])) * abs(int(corners[1][1]) - int(corners[2][1]))}")
+
+            f = open("/code/catkin_ws/src/SIgnRecognisionDuckies/packages/assets/sign_ids.txt", "w")
             if abs(int(corners[0][0]) - int(corners[1][0])) * abs(int(corners[1][1]) - int(corners[2][1])) > self.detection_range:
-                f = open("/code/catkin_ws/src/SIgnRecognisionDuckies/packages/assets/sign_ids.txt", "w")
                 f.write(str(tag_id))
-                f.write("\n")
-                f.close()
+            f.close()
 
         return image
 # test for detect_apriltag

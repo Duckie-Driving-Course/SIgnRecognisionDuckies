@@ -9,6 +9,7 @@ from sensor_msgs.msg import CompressedImage
 HOST = os.environ['VEHICLE_NAME']
 TOPIC_NAME = f'/{HOST}/camera_node/image/compressed'
 
+
 class AprilTaggerNode(DTROS):
     def __init__(self, node_name, result_topic_name):
         super(AprilTaggerNode, self).__init__(node_name=node_name, node_type=NodeType.PERCEPTION)
@@ -18,8 +19,6 @@ class AprilTaggerNode(DTROS):
         self.pub = rospy.Publisher(result_topic_name, CompressedImage, queue_size=1)
 
     def callback(self, msg):
-        print(f'received message with type ${type(msg)}')
-
         converted_img = self.bridge.compressed_imgmsg_to_cv2(msg, 'bgr8')  # CV2 Image
 
         processed_img = self.aprilTagger.process_image(converted_img)

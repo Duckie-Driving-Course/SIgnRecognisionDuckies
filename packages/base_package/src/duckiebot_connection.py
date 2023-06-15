@@ -19,5 +19,4 @@ class DuckiebotNode(DTROS):
         self.pub = rospy.Publisher(result_topic_name, CompressedImage, queue_size=1)
 
     def callback(self, msg):
-        print(f'received message with type ${type(msg)}')
-
+        pass
