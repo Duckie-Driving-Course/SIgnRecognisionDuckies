@@ -88,7 +88,7 @@ class AprilTagger:
                        cv.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2, cv.LINE_AA)
 
             if abs(int(corners[0][0]) - int(corners[1][0])) * abs(int(corners[1][1]) - int(corners[2][1])) > self.detection_range:
-                f = open("/code/catkin_ws/src/SIgnRecognisionDuckies/assets/sign_ids.txt", "w")
+                f = open("/code/catkin_ws/src/SIgnRecognisionDuckies/packages/assets/sign_ids.txt", "w")
                 f.write(str(tag_id))
                 f.write("\n")
                 f.close()

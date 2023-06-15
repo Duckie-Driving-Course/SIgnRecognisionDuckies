@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 import os
 import rospy
 from duckietown_msgs.msg import WheelsCmdStamped
@@ -62,7 +61,7 @@ class WheelsDriver(DTROS):
         while not rospy.is_shutdown():
             self.wheels_cmd_pub.publish(wheel)
             self.wheels_cmd_executed_pub.publish(wheel)
-            f = open("/code/catkin_ws/src/SIgnRecognisionDuckies/assets/sign_ids.txt", "r")
+            f = open("/code/catkin_ws/src/SIgnRecognisionDuckies/packages/assets/sign_ids.txt", "r")
             tag_id = f.read()
             if detected_id != tag_id and tag_id != '':
                 wheel.vel_left, wheel.vel_right = COMMAND_DICTIONARY[tag_id.strip()](wheel.vel_left, wheel.vel_right)

@@ -2,7 +2,7 @@
 **
 
 # Allow files and directories
-!assets
+!packages/assets
 !packages
 !dependencies-apt.txt
 !dependencies-py3.txt
